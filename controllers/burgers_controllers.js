@@ -10,8 +10,12 @@ var router = express.Router();
 // Import the model (burger.js) to use its database functions.
 var burger = require("../models/burger.js");
 
-//create routes and logic
 router.get("/", function(req, res) {
+    res.redirect("/burgers")
+})
+
+//create routes and logic
+router.get("/burgers", function(req, res) {
     burger.all(function(data) {
       var hbsObject = {
         burgers: data
@@ -21,15 +25,14 @@ router.get("/", function(req, res) {
     });
   });
   
-  router.post("/", function(req, res) {
-    burger.create([
-      "burger_name", "devoured"
-    ], [
-      req.body.burger_name, req.body.devoured
-    ], function(result) {
+  router.post("/burgers/create", function(req, res) {
+    burger.create( req.body.burger_name, function(result) {
       // Send back the ID of the new quote
-      res.json({ id: result.insertId });
+    //   res.json({ id: result.insertId });
+
+    console.log("Here is result", result)
     });
+    res.redirect("/")
   });
   
   router.put("/:id", function(req, res) {
